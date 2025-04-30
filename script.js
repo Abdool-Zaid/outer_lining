@@ -1,6 +1,12 @@
 
 let pattern_start = '{{'
 let pattern_end = '}}'
+let state = {
+    variable:{
+        init:[]
+    },
+    controllers: {}
+}
 
 window.addEventListener('DOMContentLoaded',()=>{ // find the stuff that needs to change
     // console.log("content has been loaded")
@@ -35,3 +41,6 @@ let add_unique_id = (Element, number)=>{
 
     // return uid
 }
+
+// return the state for other scripts to acccess
+ window.state = state
