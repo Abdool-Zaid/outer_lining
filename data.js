@@ -1,1 +1,1 @@
-console.log(window.state)
+console.log(window.state.variable)
