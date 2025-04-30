@@ -3,7 +3,10 @@ let pattern_start = '{{'
 let pattern_end = '}}'
 let state = {
     variable:{
-        init:[]
+        init:"variable"
+    },
+    locations:{
+        _init: []
     },
     controllers: {}
 }
