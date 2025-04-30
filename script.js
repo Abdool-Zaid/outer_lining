@@ -9,11 +9,19 @@ window.addEventListener('DOMContentLoaded',()=>{ // find the stuff that needs to
         if(!Element.innerHTML.includes("</")){
         
             if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end))
-                if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end))
-            console.log( Element.innerHTML)
+                if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+                    // add to the list of things that should be rerendered
+                    get_variable_name(Element)
+                }
         }
     })
 
 
 })
 
+let get_variable_name = (Element)=>{
+    let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
+    let i_end = Element.innerHTML.indexOf(pattern_end)
+    let variable_name = Element.innerHTML.slice(i_start,i_end)
+    console.log(variable_name)
+}
