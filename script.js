@@ -17,14 +17,16 @@ window.addEventListener('DOMContentLoaded',()=>{ // find the stuff that needs to
     all_elements.forEach((Element,index)=>{
         if(!Element.innerHTML.includes("</")){
         
-            if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end))
+            if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+
                 if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
                     let variable_name= get_variable_name(Element)
                     add_unique_id(Element,index)
                     // add to the list of things that should be rerendered
                     console.log(variable_name)
-
+                    
                 }
+            }
         }
     })
 
