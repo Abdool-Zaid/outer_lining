@@ -1,1 +1,3 @@
-console.log(window.state.variable)
+console.log(window.state)
+
+
