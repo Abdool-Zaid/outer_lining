@@ -1,13 +1,10 @@
 
 let pattern_start = '{{'
 let pattern_end = '}}'
-let state = {
-    variables:{
-        init:"variable"
-    },
-    locations:{
-        _init: []
-    },
+let locations = new Map()
+ window.state = {
+    variables:{},
+    locations:locations,
     controllers: {}
 }
 
@@ -21,16 +18,15 @@ let mut_callback =()=>{
 
               if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
                   let variable_name= get_variable_name(Element)
-                  add_unique_id(Element,index)
-                  append_state(variable_name, Element.uid)
+                  append_state(variable_name, Element)
                   match_location()
                   
               }
-          }
-      }
-  })
-  
-  
+            }
+        }
+    })
+    
+    
 }
 
 
@@ -39,8 +35,9 @@ const config = { attributes: true, childList: true, subtree: true };
 
 const observer = new MutationObserver(mut_callback);
 
-observer.observe(document, config)
+// document.addEventListener('DOMContentLoaded', mut_callback)
 
+observer.observe(document, config) // can be state instead of document ?
 
 
 
@@ -52,59 +49,34 @@ let get_variable_name = (Element)=>{
     return variable_name
 }
 
-let add_unique_id = (Element, number)=>{
-    if(Element.uid== undefined){
-        let uid = "v"
-        uid = uid + number +  crypto.randomUUID()
-        Element.uid = uid
+
+let append_state= (variable_name, element)=>{
+    if(window.state.variables.variable_name==undefined){   // not catching properly
         
-    }  else{
-        console.log("element has uid already")
-    }
-}
-let append_state= (variable_name, uid)=>{
-    if(state.variables.variable_name==undefined){ 
-        
-        state.variables[variable_name]= null
-        state.locations[variable_name]= [uid]
+        window.state.variables[variable_name]= null
+        window.state.locations.set(variable_name, element);
         
     }else{
-        if(!state.locations.variable_name.includes(uid)){
-            console.log("should add uid", uid)
-        }    
+        console.log(window.state.locations)
+        // if(!window.state.locations.variable_name.includes(uid)){ //todo refactor to map logic
+        //     console.log("should add uid", uid)
+        // }    
     }
 
 }
 
 let match_location= ()=>{
-    let match_array =Object.keys(state.variables) 
+    console.log(window.state.variables)     
+    let match_array =Object.keys(window.state.variables) 
     match_array.forEach((data, i)=>{
-        
-        if (state.locations[data]!= undefined){
-            for (let index = 0; index < state.locations[data].length; index++) {
-                    console.log(state.locations[data][index])
-                let element = get_element_by_uid(state.locations[data][index].toString())
-                console.log(state.variables[data], element)
-                // element.innerHTML= state.variables[data] 
-                element.innerHTML= `state.variables[data]` 
-            }
-        }    
+        let el = get_element_by_uid(data)
+        console.log(`${state.variables[data]}`)
+        el.innerHTML= `${state.variables[data]}`
     })
 }
 
-function get_element_by_uid (uid_str){
+function get_element_by_uid (variable_name){
 
-    let allElements = document.querySelectorAll('*');
-    
-
-        for (const element of allElements) {
-            if (element.uid === uid_str) {
-                return element;
-            }
+    return window.state.locations.get(variable_name) || null;
 }
 
-// Return null if no element is found
-return null;
-}
-
- window.state = state
