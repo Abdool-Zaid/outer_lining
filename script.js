@@ -53,7 +53,7 @@ let add_unique_id = (Element, number)=>{
     }
 }
 let append_state= (variable_name, uid)=>{
-    if(state.variables.variable_name==undefined){ // must add variable
+    if(state.variables.variable_name==undefined){ 
         
         state.variables[variable_name]= null
         state.locations[variable_name]= [uid]
