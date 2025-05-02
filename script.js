@@ -11,27 +11,38 @@ let state = {
     controllers: {}
 }
 
-window.addEventListener('DOMContentLoaded',()=>{ // find the stuff that needs to change
-    // console.log("content has been loaded")
-   let all_elements = document.querySelectorAll('*')
-    all_elements.forEach((Element,index)=>{
-        if(!Element.innerHTML.includes("</")){
-        
-            if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
 
-                if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-                    let variable_name= get_variable_name(Element)
-                    add_unique_id(Element,index)
-                    append_state(variable_name, Element.uid)
-                    // add to the list of things that should be rerendered
-                    
-                }
-            }
-        }
-    })
-    
-    
-})
+let mut_callback =()=>{
+  let all_elements = document.querySelectorAll('*')
+  all_elements.forEach((Element,index)=>{
+      if(!Element.innerHTML.includes("</")){
+      
+          if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+
+              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+                  let variable_name= get_variable_name(Element)
+                  add_unique_id(Element,index)
+                  append_state(variable_name, Element.uid)
+                  match_location()
+                  
+              }
+          }
+      }
+  })
+  
+  
+}
+
+
+// Options for the observer (which mutations to observe)
+const config = { attributes: true, childList: true, subtree: true };
+
+const observer = new MutationObserver(mut_callback);
+
+observer.observe(document, config)
+
+
+
 
 let get_variable_name = (Element)=>{
     let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
@@ -43,7 +54,6 @@ let get_variable_name = (Element)=>{
 
 let add_unique_id = (Element, number)=>{
     if(Element.uid== undefined){
-        /* This is a comment */
         let uid = "v"
         uid = uid + number +  crypto.randomUUID()
         Element.uid = uid
@@ -64,6 +74,37 @@ let append_state= (variable_name, uid)=>{
         }    
     }
 
+}
+
+let match_location= ()=>{
+    let match_array =Object.keys(state.variables) 
+    match_array.forEach((data, i)=>{
+        
+        if (state.locations[data]!= undefined){
+            for (let index = 0; index < state.locations[data].length; index++) {
+                    console.log(state.locations[data][index])
+                let element = get_element_by_uid(state.locations[data][index].toString())
+                console.log(state.variables[data], element)
+                // element.innerHTML= state.variables[data] 
+                element.innerHTML= `state.variables[data]` 
+            }
+        }    
+    })
+}
+
+function get_element_by_uid (uid_str){
+
+    let allElements = document.querySelectorAll('*');
+    
+
+        for (const element of allElements) {
+            if (element.uid === uid_str) {
+                return element;
+            }
+}
+
+// Return null if no element is found
+return null;
 }
 
  window.state = state
