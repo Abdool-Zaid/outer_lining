@@ -70,8 +70,7 @@ let match_location= ()=>{
     let match_array =Object.keys(window.state.variables) 
     match_array.forEach((data, i)=>{
         let el = get_element_by_uid(data)
-        console.log(`${state.variables[data]}`)
-        el.innerHTML= `${state.variables[data]}`
+        el.innerHTML= el.innerHTML.replace(`${pattern_start}${data}${pattern_end}`,`${state.variables[data]}`)
     })
 }
 
