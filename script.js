@@ -35,7 +35,13 @@ const config = { attributes: true, childList: true, subtree: true };
 
 const observer = new MutationObserver(mut_callback);
 
-// document.addEventListener('DOMContentLoaded', mut_callback)
+document.addEventListener('DOMContentLoaded', ()=>{ // add state 
+    
+    const state_node = document.createElement('state')
+    document.head.appendChild(state_node)
+    console.log('should add state here', document.head)
+
+})
 
 observer.observe(document, config) // can be state instead of document ?
 
