@@ -1,9 +1,13 @@
 
-console.log(window.state)
 
 
 let action_btn = document.getElementById('action_btn')
 action_btn.addEventListener('click', ()=>{
-    window.state.variables.x_num= window.state.variables.x_num + 1
-    console.log(window.state.variables.x_num)
+     
+    state.variables.x_num == null ? state.variables.x_num = 1 : true
+    state.variables.x_num++
+    
+    console.log(state.variables.x_num)
+
+    
 })

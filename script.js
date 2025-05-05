@@ -1,25 +1,26 @@
 
 let pattern_start = '{{'
 let pattern_end = '}}'
-let locations = new Map()
- window.state = {
+let _locations = new Map()
+let state = {
     variables:{},
-    locations:locations,
+    locations:_locations,
     controllers: {}
 }
 
 
-let mut_callback =()=>{
-  let all_elements = document.querySelectorAll('*')
-  all_elements.forEach((Element,index)=>{
+let _mut_callback =()=>{
+  let _all_elements = document.querySelectorAll('*')
+  _all_elements.forEach((Element,index)=>{
       if(!Element.innerHTML.includes("</")){
-      
+          
           if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
-
+              
               if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-                  let variable_name= get_variable_name(Element)
-                  append_state(variable_name, Element)
-                  match_location()
+                  let variable_name= _get_variable_name(Element)
+                  _append_state(variable_name, Element)
+                  _match_location()
+
                   
               }
             }
@@ -33,21 +34,22 @@ let mut_callback =()=>{
 // Options for the observer (which mutations to observe)
 const config = { attributes: true, childList: true, subtree: true };
 
-const observer = new MutationObserver(mut_callback);
+const observer = new MutationObserver(_mut_callback);
+let _state_node = document.createElement('state')
 
 document.addEventListener('DOMContentLoaded', ()=>{ // add state 
     
-    const state_node = document.createElement('state')
-    document.head.appendChild(state_node)
-    console.log('should add state here', document.head)
-
+    
+    document.head.appendChild(_state_node)
+    _mut_callback() // call once to initialise the state
+    _state_node.state = state
 })
 
-observer.observe(document, config) // can be state instead of document ?
+observer.observe(_state_node, config) 
 
 
 
-let get_variable_name = (Element)=>{
+let _get_variable_name = (Element)=>{
     let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
     let i_end = Element.innerHTML.indexOf(pattern_end)
     let variable_name = Element.innerHTML.slice(i_start,i_end)
@@ -56,24 +58,23 @@ let get_variable_name = (Element)=>{
 }
 
 
-let append_state= (variable_name, element)=>{
-    if(window.state.variables.variable_name==undefined){   // not catching properly
+let _append_state= (variable_name, element)=>{
+    if(state.variables.variable_name==undefined){   // not catching properly
         
-        window.state.variables[variable_name]= null
-        window.state.locations.set(variable_name, element);
+        state.variables[variable_name]= null
+        state.locations.set(variable_name, element);
         
     }else{
-        console.log(window.state.locations)
-        // if(!window.state.locations.variable_name.includes(uid)){ //todo refactor to map logic
+        console.log(state.locations)
+        // if(!state.locations.variable_name.includes(uid)){ //todo refactor to map logic
         //     console.log("should add uid", uid)
         // }    
     }
 
 }
 
-let match_location= ()=>{
-    console.log(window.state.variables)     
-    let match_array =Object.keys(window.state.variables) 
+let _match_location= ()=>{
+    let match_array =Object.keys(state.variables) 
     match_array.forEach((data, i)=>{
         let el = get_element_by_uid(data)
         el.innerHTML= el.innerHTML.replace(`${pattern_start}${data}${pattern_end}`,`${state.variables[data]}`)
@@ -82,6 +83,9 @@ let match_location= ()=>{
 
 function get_element_by_uid (variable_name){
 
-    return window.state.locations.get(variable_name) || null;
+    return state.locations.get(variable_name) || null;
 }
+ 
+
+
 
