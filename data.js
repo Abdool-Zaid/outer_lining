@@ -1,4 +1,5 @@
 
+console.log(state)
 
 
 let action_btn = document.getElementById('action_btn')
