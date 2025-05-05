@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>state test</title>
+</head>
+<body>
+<button id="action_btn">++</button>
+<h1 id="data"></h1>
+
+</body>
+
+<script>
+    function mut_callback(){
+        console.log('mutation detected')
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{ 
+        const config = { attributes: true, childList: true, subtree: true };
+        const data = document.getElementById('data')
+        data.innerHTML= 1
+        const observer = new MutationObserver(mut_callback);
+        observer.observe(data, config) 
+
+
+
+
+        let btn = document.getElementById("action_btn")
+        btn.addEventListener('click',()=>{
+            data.innerHTML++
+           
+        })
+
+
+    })
+</script>
+</html>
