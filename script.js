@@ -31,7 +31,6 @@ let _mut_callback =()=>{
 }
 
 
-// Options for the observer (which mutations to observe)
 const config = { attributes: true, childList: true, subtree: true };
 
 const observer = new MutationObserver(_mut_callback);

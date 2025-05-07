@@ -45,3 +45,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 
+ function prefers_dark_theme() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
