@@ -1,6 +1,7 @@
 let _state ={
     data:{},
     themes: {
+        wants_dark_theme : _prefers_dark_theme(),
         light:{
             primary: 'white',
             secondary: 'black',
@@ -14,7 +15,7 @@ let _state ={
     },
     _locations:[],
     controllers:{
-        wants_dark_theme :(arg)=> _prefers_dark_theme(arg)
+       set_theme : _set_theme
     }
 }
 const _handler = {
@@ -37,14 +38,12 @@ const _handler = {
 
 
 
-function _prefers_dark_theme(func) { // might be better to put styling stuff in a seperate style file
-    if(typeof(func)== 'function'){
-        func()
-    }
+function _prefers_dark_theme() { // might be better to put styling stuff in a seperate style file
+    
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-function _set_theme(){
+function _set_theme(){ // todo adjust to use custom theme 
 const styles = document.createElement('style')
 
 let theme = 'default'
@@ -55,12 +54,15 @@ const cssRules = `
         background-color: ${state.themes[theme].primary};
         color:${state.themes[theme].secondary};
     }
+        a:-webkit-any-link{        
+        color:${state.themes[theme].accent};
+    }
 `;
-
 styles.textContent = cssRules;
 document.head.appendChild(styles);
 
 }
+
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
 })
