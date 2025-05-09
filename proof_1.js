@@ -9,7 +9,7 @@ let _state ={
         },
         dark:{
             primary: '#050808',
-            secondary: '#333535',
+            secondary: '#86e9a5',
             accent : '#ff8847',
         },
     },
@@ -53,8 +53,9 @@ const cssRules = `
     *{
         background-color: ${state.themes[theme].primary};
         color:${state.themes[theme].secondary};
+        font-family: monospace;
     }
-        a:-webkit-any-link{        
+    a:-webkit-any-link{        
         color:${state.themes[theme].accent};
     }
 `;
@@ -65,6 +66,7 @@ document.head.appendChild(styles);
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
+    console.log(document.getElementById) // might want to extend to find by custom attribute
 })
 
 
