@@ -44,7 +44,6 @@ function _prefers_dark_theme() { // might be better to put styling stuff in a se
   }
 
 function _set_theme(theme){   
-    console.log(Object.keys(state.themes ).includes(theme), 'has theme', theme)
    
     if(theme === undefined){
         theme = _prefers_dark_theme() ? 'dark' : 'light';
@@ -71,7 +70,7 @@ document.head.appendChild(styles);
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
-    console.log(document.getElementById) // might want to extend to find by custom attribute
+    // console.log(document.getElementById) // might want to extend to find by custom attribute
 })
 
 
