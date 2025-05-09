@@ -15,7 +15,7 @@ let _state ={
     },
     _locations:[],
     controllers:{
-       set_theme : _set_theme
+       set_theme :(theme) =>_set_theme(theme)
     }
 }
 const _handler = {
@@ -43,11 +43,16 @@ function _prefers_dark_theme() { // might be better to put styling stuff in a se
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-function _set_theme(){ // todo adjust to use custom theme 
+function _set_theme(theme){   
+    console.log(Object.keys(state.themes ).includes(theme), 'has theme', theme)
+   
+    if(theme === undefined){
+        theme = _prefers_dark_theme() ? 'dark' : 'light';
+    }else if (!Object.keys(state.themes ).includes(theme)){
+      return  alert("theme must be either 'light' or 'dark' or ommited for default ")
+    } 
+    
 const styles = document.createElement('style')
-
-let theme = 'default'
-_prefers_dark_theme? theme ='dark' : theme ='light'
 
 const cssRules = `
     *{
