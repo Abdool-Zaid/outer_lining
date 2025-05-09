@@ -48,23 +48,29 @@ function _set_theme(theme){
     if(theme === undefined){
         theme = _prefers_dark_theme() ? 'dark' : 'light';
     }else if (!Object.keys(state.themes ).includes(theme)){
-      return  alert("theme must be either 'light' or 'dark' or ommited for default ")
+      return  alert("theme is not in state.themes, this argument can be ommited to use default theme ")
     } 
-    
-const styles = document.createElement('style')
 
-const cssRules = `
+    const cssRules = `
     *{
-        background-color: ${state.themes[theme].primary};
-        color:${state.themes[theme].secondary};
-        font-family: monospace;
+    background-color: ${state.themes[theme].primary};
+    color:${state.themes[theme].secondary};
+    font-family: monospace;
     }
     a:-webkit-any-link{        
         color:${state.themes[theme].accent};
-    }
-`;
-styles.textContent = cssRules;
-document.head.appendChild(styles);
+        }
+        `;
+
+    if(document.getElementById('outer_lining_styles')){
+      const  styles= document.getElementById('outer_lining_styles')
+      styles.textContent = cssRules;
+    }else{
+        const styles = document.createElement('style')
+        styles.id ='outer_lining_styles'
+            styles.textContent = cssRules;
+            document.head.appendChild(styles);
+        }
 
 }
 
