@@ -46,10 +46,14 @@ function _prefers_dark_theme(func) { // might be better to put styling stuff in 
 
 function _set_theme(){
 const styles = document.createElement('style')
+
+let theme = 'default'
+_prefers_dark_theme? theme ='dark' : theme ='light'
+
 const cssRules = `
     *{
-        background-color: ${state.themes.dark.primary};
-        color:${state.themes.dark.secondary};
+        background-color: ${state.themes[theme].primary};
+        color:${state.themes[theme].secondary};
     }
 `;
 
