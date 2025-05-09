@@ -2,9 +2,9 @@ let _state ={
     data:{},
     themes: {
         light:{
-            primary: '',
-            secondary: '',
-            accent : '',
+            primary: 'white',
+            secondary: 'black',
+            accent : 'blue',
         },
         dark:{
             primary: '#050808',
