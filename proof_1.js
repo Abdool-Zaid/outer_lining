@@ -32,10 +32,8 @@ const _handler = {
         // user defined post-hook
       },
       set (target, key, value) {// add hooks here as well
-        console.log(target)
         _set_variables_in_dom(key,value)
         target[key] = value;
-        console.log(key,value)
         return true
       }
 };
@@ -87,19 +85,14 @@ function _set_variable(key,value){
 
 
 function _set_variables_in_dom(key, value){
-    if(_locations.some(item => item.Element === Element)){
-        console.log('found element in location')
-    }else{
-        
-        console.log('no element in location')
-    }
+    
     let _all_elements = document.querySelectorAll('*')
     
         _all_elements.forEach((Element,index)=>{
              if(_locations.some(item => item.Element === Element)){
-                 console.log(_locations.find(item => item.Element === Element).template)                   // break here if element is found ???
-
-                 Element.innerHTML= _locations.find(item => item.Element === Element).template
+                 console.log("found",value, _locations.find(item => item.Element === Element).template)                   // break here if element is found ???
+                    template= _locations.find(item => item.Element === Element).template
+                 Element.innerHTML= Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`,value)
             }else{
 
                 if(!Element.innerHTML.includes("</")){
@@ -107,9 +100,9 @@ function _set_variables_in_dom(key, value){
                     if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){// set location map in here and check above if the location is already there
                         
                         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-                            console.table(_locations)
-                            Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`, `\$\{value\}`) 
-                            _locations.push({Element:Element, template: Element.innerHTML})
+                            // Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`,value) 
+                            // _locations.push({Element:Element, template: Element.innerHTML})
+                            _locations.push({'Element': Element, template: Element.innerHTML})
 
                         }
                     }
