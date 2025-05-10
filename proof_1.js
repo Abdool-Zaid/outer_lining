@@ -1,6 +1,6 @@
 let pattern_start = '{{'
 let pattern_end = '}}'
-
+let  _locations= []
 let _state ={
     data:{},
     themes: {
@@ -16,7 +16,6 @@ let _state ={
             accent : '#ff8847',
         },
     },
-    _locations:[],
     controllers:{
        set_theme :(theme) =>_set_theme(theme),
        set_data:(key,value)=> _set_variable(key,value) 
@@ -33,6 +32,7 @@ const _handler = {
         // user defined post-hook
       },
       set (target, key, value) {// add hooks here as well
+        console.log(target)
         _set_variables_in_dom(key,value)
         target[key] = value;
         console.log(key,value)
@@ -85,51 +85,42 @@ function _set_variable(key,value){
     state.data[key]= value
 }
 
-// let _get_variable_name = (Element)=>{
-//     let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
-//     let i_end = Element.innerHTML.indexOf(pattern_end)
-//     let variable_name = Element.innerHTML.slice(i_start,i_end)
-//     console.log(variable_name)
-//     return [variable_name, i_end]
-// }
-// let _get_all_variables = (Element)=>{
-//     let variables = []
-//     let res = new Map()
-//     let variable_count
-//     let remaining_string = Element.innerHTML.length
-//     let search_index= 0
-//     while (search_index<remaining_string) {     
-//         console.log(Element.innerHTML[search_index])
-//         search_index++
-//     }
-
-
-//     // console.log(remaining_string)
-// }
-
 
 function _set_variables_in_dom(key, value){
-    console.log('should set variables in dom')
+    if(_locations.some(item => item.Element === Element)){
+        console.log('found element in location')
+    }else{
+        
+        console.log('no element in location')
+    }
     let _all_elements = document.querySelectorAll('*')
+    
         _all_elements.forEach((Element,index)=>{
-        if(!Element.innerHTML.includes("</")){
-          
-          if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
-              
-              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+             if(_locations.some(item => item.Element === Element)){
+                 console.log(_locations.find(item => item.Element === Element).template)                   // break here if element is found ???
 
-                Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
-                  
-              }
+                 Element.innerHTML= _locations.find(item => item.Element === Element).template
+            }else{
+
+                if(!Element.innerHTML.includes("</")){
+                    
+                    if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){// set location map in here and check above if the location is already there
+                        
+                        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+                            console.table(_locations)
+                            Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`, `\$\{value\}`) 
+                            _locations.push({Element:Element, template: Element.innerHTML})
+
+                        }
+                    }
+                }
             }
-        }
-    })
+            })
   
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
-    // _get_variable_locations()
     // console.log(document.getElementById) // might want to extend to find by custom attribute
 })
 
