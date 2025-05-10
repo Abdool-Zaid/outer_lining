@@ -1,3 +1,6 @@
+let pattern_start = '{{'
+let pattern_end = '}}'
+
 let _state ={
     data:{},
     themes: {
@@ -15,7 +18,8 @@ let _state ={
     },
     _locations:[],
     controllers:{
-       set_theme :(theme) =>_set_theme(theme)
+       set_theme :(theme) =>_set_theme(theme),
+       set_data:(key,value)=> _set_variable(key,value) 
     }
 }
 const _handler = {
@@ -29,7 +33,9 @@ const _handler = {
         // user defined post-hook
       },
       set (target, key, value) {// add hooks here as well
-            target[key] = value;
+        _set_variables_in_dom(key,value)
+        target[key] = value;
+        console.log(key,value)
         return true
       }
 };
@@ -74,8 +80,56 @@ function _set_theme(theme){
 
 }
 
+function _set_variable(key,value){
+    // console.log(key,value)
+    state.data[key]= value
+}
+
+// let _get_variable_name = (Element)=>{
+//     let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
+//     let i_end = Element.innerHTML.indexOf(pattern_end)
+//     let variable_name = Element.innerHTML.slice(i_start,i_end)
+//     console.log(variable_name)
+//     return [variable_name, i_end]
+// }
+// let _get_all_variables = (Element)=>{
+//     let variables = []
+//     let res = new Map()
+//     let variable_count
+//     let remaining_string = Element.innerHTML.length
+//     let search_index= 0
+//     while (search_index<remaining_string) {     
+//         console.log(Element.innerHTML[search_index])
+//         search_index++
+//     }
+
+
+//     // console.log(remaining_string)
+// }
+
+
+function _set_variables_in_dom(key, value){
+    console.log('should set variables in dom')
+    let _all_elements = document.querySelectorAll('*')
+        _all_elements.forEach((Element,index)=>{
+        if(!Element.innerHTML.includes("</")){
+          
+          if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+              
+              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+
+                Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+                  
+              }
+            }
+        }
+    })
+  
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
+    // _get_variable_locations()
     // console.log(document.getElementById) // might want to extend to find by custom attribute
 })
 
