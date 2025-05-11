@@ -91,14 +91,19 @@ async function _set_variables_in_dom(key, value){
   _all_elements.forEach((Element,index)=>{
     if(!Element.innerHTML.includes("</")){
       
+      if(Element.hasAttribute('template')){
+        console.log('template',Element.template)  
+         Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+         }
+
       if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
           if(!Element.hasAttribute('template')){
               Element.template= Element.innerHTML
-            console.log('template',Element.template)  
+            // console.log('setting template',Element.template)  
              }
-          // console.log('should set variables in dom')
+          console.log(Element.template)
                 Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
                   
               }
