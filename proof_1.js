@@ -85,40 +85,21 @@ function _set_variable(key,value){
     state.data[key]= value
 }
 
-// let _get_variable_name = (Element)=>{
-//     let i_start = Element.innerHTML.indexOf(pattern_start) + pattern_start.length
-//     let i_end = Element.innerHTML.indexOf(pattern_end)
-//     let variable_name = Element.innerHTML.slice(i_start,i_end)
-//     console.log(variable_name)
-//     return [variable_name, i_end]
-// }
-// let _get_all_variables = (Element)=>{
-//     let variables = []
-//     let res = new Map()
-//     let variable_count
-//     let remaining_string = Element.innerHTML.length
-//     let search_index= 0
-//     while (search_index<remaining_string) {     
-//         console.log(Element.innerHTML[search_index])
-//         search_index++
-//     }
-
-
-//     // console.log(remaining_string)
-// }
-
 
 function _set_variables_in_dom(key, value){
-    console.log('should set variables in dom')
-    let _all_elements = document.querySelectorAll('*')
-        _all_elements.forEach((Element,index)=>{
-        if(!Element.innerHTML.includes("</")){
-          
-          if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
-              
-              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-
-                Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+  let _all_elements = document.querySelectorAll('*')
+  _all_elements.forEach((Element,index)=>{
+    if(!Element.innerHTML.includes("</")){
+      
+      if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+        
+        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+          if(typeof(Element.template) == 'undefined'){
+            Element.template= Element.innerHTML
+            // console.log('template',Element.template)  
+          }
+          // console.log('should set variables in dom')
+                Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
                   
               }
             }
