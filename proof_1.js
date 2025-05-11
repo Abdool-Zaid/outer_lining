@@ -86,7 +86,7 @@ function _set_variable(key,value){
 }
 
 
-function _set_variables_in_dom(key, value){
+async function _set_variables_in_dom(key, value){
   let _all_elements = document.querySelectorAll('*')
   _all_elements.forEach((Element,index)=>{
     if(!Element.innerHTML.includes("</")){
@@ -94,12 +94,12 @@ function _set_variables_in_dom(key, value){
       if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-          if(typeof(Element.template) == 'undefined'){
-            Element.template= Element.innerHTML
-            // console.log('template',Element.template)  
-          }
+          if(!Element.hasAttribute('template')){
+              Element.template= Element.innerHTML
+            console.log('template',Element.template)  
+             }
           // console.log('should set variables in dom')
-                Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+                Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
                   
               }
             }
