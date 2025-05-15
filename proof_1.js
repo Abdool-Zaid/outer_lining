@@ -85,37 +85,59 @@ function _set_variable(key,value){
     state.data[key]= value
 }
 
+function _set_variables_in_dom(key, value){
+  let _all_elements = document.querySelectorAll("*")
 
-async function _set_variables_in_dom(key, value){
-  let _all_elements = document.querySelectorAll('*')
-  _all_elements.forEach((Element,index)=>{
-    if(!Element.innerHTML.includes("</")){
+  _all_elements.forEach((Element)=>{
 
-      try {
-      if(Element.template.length){
-        console.log('template',Element.template)  
-         Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
-      }
-      } catch (error) {
-        
+     
 
-          console.log('no template found') 
-           if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
-             
-             if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-          if(!Element.hasAttribute('template')){
-              Element.template= Element.innerHTML
-            console.log('setting template',Element.template)  
-             }
-          Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
-          
-        }
-      }
+
+    if(Element.template != undefined){ // if you have a template use it , else check if you should have
+      console.log(Element.template)
+
+    }else{
+      if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+           console.log('setting template')
+          Element.template = Element.innerHTML
+
+       } 
+    } 
     }
-        }
-    })
-  
+
+
+
+  })
 }
+
+
+//  function _set_variables_in_dom(key, value){
+//   let _all_elements = document.querySelectorAll('*')
+//   _all_elements.forEach((Element,index)=>{
+//     if(!Element.innerHTML.includes("</")){
+//       if(Element.hasAttribute('template')){
+//         console.log('template',Element.template)  
+//          Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+//          }else{
+
+//           console.log('no template found') 
+//            if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+             
+//              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+//           if(!Element.hasAttribute('template')){
+//               Element.template= Element.innerHTML
+//             console.log('setting template',Element.template)  
+//              }
+//           Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
+          
+//         }
+//       }
+//     }
+//         }
+//     })
+  
+// }
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
