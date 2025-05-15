@@ -35,7 +35,7 @@ const _handler = {
       set (target, key, value) {// add hooks here as well
         _set_variables_in_dom(key,value)
         target[key] = value;
-        console.log(key,value)
+        // console.log(key,value)
         return true
       }
 };
@@ -90,24 +90,28 @@ async function _set_variables_in_dom(key, value){
   let _all_elements = document.querySelectorAll('*')
   _all_elements.forEach((Element,index)=>{
     if(!Element.innerHTML.includes("</")){
-      
-      if(Element.hasAttribute('template')){
+
+      try {
+      if(Element.template.length){
         console.log('template',Element.template)  
          Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
-         }
-
-      if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+      }
+      } catch (error) {
         
-        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+
+          console.log('no template found') 
+           if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+             
+             if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
           if(!Element.hasAttribute('template')){
               Element.template= Element.innerHTML
-            // console.log('setting template',Element.template)  
+            console.log('setting template',Element.template)  
              }
-          console.log(Element.template)
-                Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
-                  
-              }
-            }
+          Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
+          
+        }
+      }
+    }
         }
     })
   
