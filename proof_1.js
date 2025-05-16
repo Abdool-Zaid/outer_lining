@@ -33,8 +33,8 @@ const _handler = {
         // user defined post-hook
       },
       set (target, key, value) {// add hooks here as well
-        _set_variables_in_dom(key,value)
         target[key] = value;
+        _set_variables_in_dom(key,value)
         // console.log(key,value)
         return true
       }
@@ -109,35 +109,12 @@ function _set_variables_in_dom(key, value){
 
 
 function _interpolate_element (Element, key, value){
-  Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
+  // console.log(state.data[key])
+  //  get all keys 
+  Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) 
 }
 
-//  function _set_variables_in_dom(key, value){
-//   let _all_elements = document.querySelectorAll('*')
-//   _all_elements.forEach((Element,index)=>{
-//     if(!Element.innerHTML.includes("</")){
-//       if(Element.hasAttribute('template')){
-//         console.log('template',Element.template)  
-//          Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value)
-//          }else{
 
-//           console.log('no template found') 
-//            if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
-             
-//              if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-//           if(!Element.hasAttribute('template')){
-//               Element.template= Element.innerHTML
-//             console.log('setting template',Element.template)  
-//              }
-//           Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) // missing case of template having multiple different variables
-          
-//         }
-//       }
-//     }
-//         }
-//     })
-  
-// }
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
