@@ -98,10 +98,12 @@ function _set_variables_in_dom(key, value){
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
            console.log('setting template')
-            Element.template = Element.innerHTML
-            _interpolate_element (Element, key, value)   
-          } 
+          // add variables to el.state
+          Element.state= {}
+          Element.template = Element.innerHTML
+          _interpolate_element (Element, key, value)   
         } 
+      } 
     }
 
   })
@@ -109,8 +111,7 @@ function _set_variables_in_dom(key, value){
 
 
 function _interpolate_element (Element, key, value){
-  // console.log(state.data[key])
-  //  get all keys 
+  Element.state[key]= value
   Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) 
 }
 
