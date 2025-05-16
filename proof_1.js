@@ -22,20 +22,18 @@ let _state ={
        set_data:(key,value)=> _set_variable(key,value) 
     }
 }
-const _handler = {
+const _handler = { // add hooks for user defined functions
     get(target, key) {
-        // user defined  pre-hook
         if (typeof target[key] === 'object' && target[key] !== null) {
           return new Proxy(target[key], _handler)
         } else {
           return target[key];
         }
-        // user defined post-hook
+  
       },
-      set (target, key, value) {// add hooks here as well
+      set (target, key, value) {
         target[key] = value;
-        _set_variables_in_dom(key,value)
-        // console.log(key,value)
+        _set_variables_in_dom(key)
         return true
       }
 };
@@ -85,21 +83,22 @@ function _set_variable(key,value){
     state.data[key]= value
 }
 
-function _set_variables_in_dom(key, value){
+function _set_variables_in_dom(key){
   let _all_elements = document.querySelectorAll("*")
 
   _all_elements.forEach((Element)=>{
 
     if(Element.template != undefined && Element.template.includes(key)){ // if you have a template use it , else check if you should have
       console.log(Element.template)
-               _interpolate_element (Element, key, value)   
+               _interpolate_element (Element, key)   
 
     }else{
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
            console.log('setting template')
+           Element.state = {}
             Element.template = Element.innerHTML
-            _interpolate_element (Element, key, value)   
+            _interpolate_element (Element, key)   
           } 
         } 
     }
@@ -108,10 +107,16 @@ function _set_variables_in_dom(key, value){
 }
 
 
-function _interpolate_element (Element, key, value){
-  // console.log(state.data[key])
-  //  get all keys 
-  Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) 
+function _interpolate_element (Element, key){
+  Element.state[key]= key
+  // console.log(Element.state)
+  let variables = Object.keys(Element.state)
+  let res  =Element.template
+    variables.forEach(data=>{
+      console.log(state.data)
+      // res = Element.template.replaceAll(`${pattern_start}${data}${pattern_end}`, value)
+    })
+  // Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) 
 }
 
 
