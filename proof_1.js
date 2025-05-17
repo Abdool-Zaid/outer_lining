@@ -21,19 +21,18 @@ let _state ={
        set_data:(key,value)=> _set_variable(key,value) 
     }
 }
-const _handler = {
+const _handler = { // add hooks for user defined functions
     get(target, key) {
-        // user defined  pre-hook
         if (typeof target[key] === 'object' && target[key] !== null) {
           return new Proxy(target[key], _handler)
         } else {
           return target[key];
         }
-        // user defined post-hook
+  
       },
-      set (target, key, value) {// add hooks here as well
-        _set_variables_in_dom(key,value)
+      set (target, key, value) {
         target[key] = value;
+        _set_variables_in_dom(key)
         return true
       }
 };
@@ -83,34 +82,42 @@ function _set_variable(key,value){
     state.data[key]= value
 }
 
+function _set_variables_in_dom(key){
+  let _all_elements = document.querySelectorAll("*")
 
-function _set_variables_in_dom(key, value){
-    
-    let _all_elements = document.querySelectorAll('*')
-    
-        _all_elements.forEach((Element,index)=>{
-             if(_locations.some(item => item.Element === Element)){
-                 console.log("found",value, _locations.find(item => item.Element === Element).template)                   // break here if element is found ???
-                    template= _locations.find(item => item.Element === Element).template
-                 Element.innerHTML= Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`,value)
-            }else{
+  _all_elements.forEach((Element)=>{
 
-                if(!Element.innerHTML.includes("</")){
-                    
-                    if(Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){// set location map in here and check above if the location is already there
-                        
-                        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-                            // Element.innerHTML = Element.innerHTML.replaceAll(`${pattern_start}${key}${pattern_end}`,value) 
-                            // _locations.push({Element:Element, template: Element.innerHTML})
-                            _locations.push({'Element': Element, template: Element.innerHTML})
+    if(Element.template != undefined && Element.template.includes(key)){ // if you have a template use it , else check if you should have
+      // console.log(Element.template)
+               _interpolate_element (Element, key)   
 
-                        }
-                    }
-                }
-            }
-            })
-  
+    }else{
+      if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
+        if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+          //  console.log('setting template')
+           Element.state = {}
+            Element.template = Element.innerHTML
+            _interpolate_element (Element, key)   
+          } 
+        } 
+    }
+
+  })
 }
+
+
+function _interpolate_element (Element, key){
+  Element.state[key]= key
+  let variables = Object.keys(Element.state)
+  let res  =Element.template
+    variables.forEach(data=>{
+      res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
+    })
+    Element.innerHTML = res 
+     
+}
+
+
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
