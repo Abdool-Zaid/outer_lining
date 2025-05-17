@@ -87,7 +87,7 @@ function _set_variables_in_dom(key){
 
   _all_elements.forEach((Element)=>{
 
-    if(Element.template != undefined && Element.template.includes(key)){ // if you have a template use it , else check if you should have
+    if(Element.template != undefined && Element.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
       // console.log(Element.template)
                _interpolate_element (Element, key)   
 
