@@ -89,13 +89,13 @@ function _set_variables_in_dom(key){
   _all_elements.forEach((Element)=>{
 
     if(Element.template != undefined && Element.template.includes(key)){ // if you have a template use it , else check if you should have
-      console.log(Element.template)
+      // console.log(Element.template)
                _interpolate_element (Element, key)   
 
     }else{
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-           console.log('setting template')
+          //  console.log('setting template')
            Element.state = {}
             Element.template = Element.innerHTML
             _interpolate_element (Element, key)   
@@ -109,14 +109,13 @@ function _set_variables_in_dom(key){
 
 function _interpolate_element (Element, key){
   Element.state[key]= key
-  // console.log(Element.state)
   let variables = Object.keys(Element.state)
   let res  =Element.template
     variables.forEach(data=>{
-      console.log(state.data)
-      // res = Element.template.replaceAll(`${pattern_start}${data}${pattern_end}`, value)
+      res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
     })
-  // Element.innerHTML = Element.template.replaceAll(`${pattern_start}${key}${pattern_end}`, value) 
+    Element.innerHTML = res 
+     
 }
 
 
