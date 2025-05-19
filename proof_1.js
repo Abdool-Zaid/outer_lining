@@ -3,6 +3,7 @@ let pattern_end = '}}'
 let  _locations= []
 let _state ={
     data:{},
+    inputs:{}, // might switch to io in the future
     themes: {
         wants_dark_theme : _prefers_dark_theme(),
         light:{
@@ -18,10 +19,14 @@ let _state ={
     },
     controllers:{
        set_theme :(theme) =>_set_theme(theme),
-       set_data:(key,value)=> _set_variable(key,value) 
+       set_data:(key,value)=> _set_variable(key,value),
+       set_input:(key,value)=> _set_input_variable(key,value) 
     }
 }
-const _handler = { // add hooks for user defined functions
+
+
+
+const _handler = { // chore: add hooks for user defined functions
     get(target, key) {
         if (typeof target[key] === 'object' && target[key] !== null) {
           return new Proxy(target[key], _handler)
@@ -31,12 +36,13 @@ const _handler = { // add hooks for user defined functions
   
       },
       set (target, key, value) {
-        target[key] = value;
-        _set_variables_in_dom(key)
+       const data_type = new Error().stack;
+          console.log(data_type); //use to figure out how to set data 
+          target[key] = value;
+          _set_variables_in_dom(key)
         return true
       }
 };
-
 
 
 
@@ -77,8 +83,15 @@ function _set_theme(theme){
 
 }
 
+
+
+function _set_input_variable(key,value){
+
+    state.inputs[key]= value //value should be displayed as placeholder
+
+}
+
 function _set_variable(key,value){
-    // console.log(key,value)
     state.data[key]= value
 }
 
@@ -88,13 +101,11 @@ function _set_variables_in_dom(key){
   _all_elements.forEach((Element)=>{
 
     if(Element.template != undefined && Element.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
-      // console.log(Element.template)
                _interpolate_element (Element, key)   
 
     }else{
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-          //  console.log('setting template')
            Element.state = {}
             Element.template = Element.innerHTML
             _interpolate_element (Element, key)   
@@ -121,7 +132,6 @@ function _interpolate_element (Element, key){
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
-    // console.log(document.getElementById) // might want to extend to find by custom attribute
 })
 
 
