@@ -36,8 +36,7 @@ const _handler = { // chore: add hooks for user defined functions
   
       },
       set (target, key, value) {
-       const data_type = new Error().stack;
-          console.log(data_type); //use to figure out how to set data 
+      
           target[key] = value;
           _set_variables_in_dom(key)
         return true
@@ -119,6 +118,14 @@ function _set_variables_in_dom(key){
   })
 }
 
+function _handle_inputs(Element){
+  let ref =  Element.value.replaceAll(pattern_start,'')
+    ref= ref.replaceAll(pattern_end,'')
+  Element.placeholder= state.inputs[ref]
+  Element.value=''
+
+}
+
 function _handle_loop(Element){
 let count= Element.getAttribute('count')
 let templates=[]
@@ -173,7 +180,7 @@ function _render_custom_DOM_elements(){
             _handle_loop(Element)
           break;
         case 'INPUT' :
-              // input stuff could go here
+             _handle_inputs(Element)
           break;
         default:
           break;
