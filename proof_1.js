@@ -43,7 +43,11 @@ const _handler = { // chore: add hooks for user defined functions
       }
 };
 
-
+function _get_value_from_template(template){
+  let ref = template.replaceAll(pattern_start,'')
+  ref = ref.replaceAll(pattern_end,'')
+  return ref
+}
 
 
 function _prefers_dark_theme() { // might be better to put styling stuff in a seperate style file

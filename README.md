@@ -20,3 +20,6 @@ instructions
             secondary: '#86e9a5',
             accent : '#ff8847',
         }
+
+
+5. you can use loops with
