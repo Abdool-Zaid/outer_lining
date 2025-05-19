@@ -88,7 +88,7 @@ function _set_variables_in_dom(key){
 
   _all_elements.forEach((Element)=>{
 
-    if(Element.template != undefined && Element.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
+    if(Element.attributes.template != undefined && Element.attributes.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
       
                _interpolate_element (Element, key)   
 
@@ -97,7 +97,7 @@ function _set_variables_in_dom(key){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
           
            Element.state = {}
-            Element.template = Element.innerHTML
+            Element.attributes.template = Element.innerHTML
             _interpolate_element (Element, key)   
           } 
         } 
@@ -108,16 +108,16 @@ function _set_variables_in_dom(key){
 
 function _handle_loop(Element){
 let count= Element.getAttribute('count')
-  Element.template = Element.innerHTML 
+  Element.attributes.template = Element.innerHTML 
   if(count.includes(pattern_end && pattern_end)){
     // handle custom number 
   }else{
     Element.innerHTML= ''
     for (let index = 0; index < count; index++) {
-      Element.innerHTML += Element.template
+      Element.innerHTML += Element.attributes.template
     }
-    if (Element.template.includes(pattern_start) && Element.template.includes( pattern_end)){ // bug: data is already set 
-      console.log(Element.template)
+    if (Element.attributes.template.includes(pattern_start) && Element.attributes.template.includes( pattern_end)){ // bug: data is already set 
+      console.log(Element.attributes.template)
       console.log('has dynamic data')
       // Element.children.forEach(child=>{
       //   console.log(child.innerHTML)
@@ -133,7 +133,7 @@ let count= Element.getAttribute('count')
 function _interpolate_element (Element, key){
   Element.state[key]= key
   let variables = Object.keys(Element.state)
-  let res  =Element.template
+  let res  =Element.attributes.template
     variables.forEach(data=>{
       res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
     })
