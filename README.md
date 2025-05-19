@@ -22,4 +22,6 @@ instructions
         }
 
 
-5. you can use loops with
+5. you can use loops with <loop count="{{foo}}"><h2>this is the item that will be repeated</h2></loop>
+    please note that the <loop> only works with one child element
+6. 

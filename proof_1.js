@@ -100,6 +100,7 @@ function _set_variable(key,value){
 }
 
 function _set_variables_in_dom(key){
+  _render_custom_DOM_elements()
   let _all_elements = document.querySelectorAll("*")
 
   _all_elements.forEach((Element)=>{
