@@ -108,26 +108,27 @@ function _set_variables_in_dom(key){
 }
 
 function _handle_loop(Element){
-let count= Element.getAttribute('count')
-let templates=[]
-let children = Element.children; 
-    Array.from(children).forEach(child => {
-      if(child.attributes.template != undefined){  //dynamic elements should already have a template
-        templates.push(child.attributes.template)
-      }
-    });
-
-
-  if(count.includes(pattern_end && pattern_end)){
-    // handle custom number 
+  let count= Element.getAttribute('count')
+  let templates=[]
+  let children = Element.children; 
+  Array.from(children).forEach(child => {
+    if(child.attributes.template != undefined){  //dynamic elements should already have a template
+      templates.push(child.attributes.template)
+    }
+  });
+  if(count.includes(pattern_end && pattern_end)){// for dynamic array lengths
+    count = _get_value_from_template(count) 
+    count = state.data[count]
+    
   }else{
-     let temp = Element.innerHTML
-     Element.innerHTML =''
+  }
+    let temp = Element.firstChild.outerHTML
+    Element.innerHTML =''
     for (let index = 0; index < count; index++) {
-        Element.innerHTML += temp
+      Element.innerHTML += temp
       
     }
-  children = Element.children; 
+    children = Element.children; 
     Array.from(children).forEach(child => {
 
       if (templates.length>0 ){
@@ -135,9 +136,7 @@ let children = Element.children;
         child.attributes.template = templates[0] 
       }
     });
-
-    
-  }
+  
 }
 
 function _interpolate_element (Element, key){
