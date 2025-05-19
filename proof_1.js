@@ -97,7 +97,8 @@ function _set_variables_in_dom(key){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
           
            Element.state = {}
-            Element.attributes.template = Element.innerHTML
+           Element.attributes.template = Element.innerHTML
+          //  console.log(Element.attributes.template)// should show html with pattern still
             _interpolate_element (Element, key)   
           } 
         } 
@@ -108,27 +109,32 @@ function _set_variables_in_dom(key){
 
 function _handle_loop(Element){
 let count= Element.getAttribute('count')
-  Element.attributes.template = Element.innerHTML 
+let templates=[]
+let children = Element.children; 
+    Array.from(children).forEach(child => {
+      if(child.attributes.template != undefined){  //dynamic elements should already have a template
+        templates.push(child.attributes.template)
+      }
+    });
+
+
   if(count.includes(pattern_end && pattern_end)){
     // handle custom number 
   }else{
-    Element.innerHTML= ''
+     let temp = Element.innerHTML
+     Element.innerHTML =''
     for (let index = 0; index < count; index++) {
-      Element.innerHTML += Element.attributes.template
+        Element.innerHTML += temp
+      
     }
-    let children = Element.children; 
+  children = Element.children; 
     Array.from(children).forEach(child => {
-        child.attributes.template =Element.attributes.template
+
+      if (templates.length>0 ){
+        child.state = {}
+        child.attributes.template = templates[0] 
+      }
     });
-    if (Element.attributes.template.includes(pattern_start) && Element.attributes.template.includes( pattern_end)){ // bug: data is already set 
-      console.log(Element.attributes.template)
-      console.log('has dynamic data')
-      // Element.children.forEach(child=>{
-      //   console.log(child.innerHTML)
-      // })
-    }else{
-        console.log('no dynamic data found')
-    }
 
     
   }
