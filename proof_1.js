@@ -116,6 +116,10 @@ let count= Element.getAttribute('count')
     for (let index = 0; index < count; index++) {
       Element.innerHTML += Element.attributes.template
     }
+    let children = Element.children; 
+    Array.from(children).forEach(child => {
+        child.attributes.template =Element.attributes.template
+    });
     if (Element.attributes.template.includes(pattern_start) && Element.attributes.template.includes( pattern_end)){ // bug: data is already set 
       console.log(Element.attributes.template)
       console.log('has dynamic data')
