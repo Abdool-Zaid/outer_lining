@@ -100,14 +100,17 @@ function _set_variables_in_dom(key){
 
   _all_elements.forEach((Element)=>{
 
-    if(Element.template != undefined && Element.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
+    if(Element.attributes.template != undefined && Element.attributes.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
+      
                _interpolate_element (Element, key)   
 
     }else{
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
+          
            Element.state = {}
-            Element.template = Element.innerHTML
+           Element.attributes.template = Element.innerHTML
+          //  console.log(Element.attributes.template)// should show html with pattern still
             _interpolate_element (Element, key)   
           } 
         } 
@@ -116,11 +119,43 @@ function _set_variables_in_dom(key){
   })
 }
 
+function _handle_loop(Element){
+let count= Element.getAttribute('count')
+let templates=[]
+let children = Element.children; 
+    Array.from(children).forEach(child => {
+      if(child.attributes.template != undefined){  //dynamic elements should already have a template
+        templates.push(child.attributes.template)
+      }
+    });
+
+
+  if(count.includes(pattern_end && pattern_end)){
+    // handle custom number 
+  }else{
+     let temp = Element.innerHTML
+     Element.innerHTML =''
+    for (let index = 0; index < count; index++) {
+        Element.innerHTML += temp
+      
+    }
+  children = Element.children; 
+    Array.from(children).forEach(child => {
+
+      if (templates.length>0 ){
+        child.state = {}
+        child.attributes.template = templates[0] 
+      }
+    });
+
+    
+  }
+}
 
 function _interpolate_element (Element, key){
   Element.state[key]= key
   let variables = Object.keys(Element.state)
-  let res  =Element.template
+  let res  =Element.attributes.template
     variables.forEach(data=>{
       res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
     })
@@ -128,10 +163,31 @@ function _interpolate_element (Element, key){
      
 }
 
+function _render_custom_DOM_elements(){
+ let _all_elements = document.querySelectorAll("*") 
+ 
+  
+    _all_elements.forEach(Element=>{
+      switch (Element.tagName) {
+        case 'LOOP':
+            _handle_loop(Element)
+          break;
+        case 'INPUT' :
+              // input stuff could go here
+          break;
+        default:
+          break;
+      }
+
+    })
+
+}
 
 
 window.addEventListener('DOMContentLoaded',()=>{
+  _render_custom_DOM_elements()
     _set_theme()
+    
 })
 
 
