@@ -9,7 +9,7 @@ instructions
     state.controllers.set_data('foo', 'bar')
 
 3. to display the data in html, call it with double curly braces, and any time the data is changed it will be reflected in the DOM   
-        ~~~HTML
+~~~HTML
  <h1>{{foo}}</h1>
 ~~~
        
@@ -28,6 +28,7 @@ instructions
 ~~~HTML
 <loop count="{{foo}}"><h2>this is the item that will be repeated</h2></loop>
 ~~~
+
 
     please note that the <loop> only works with one child element
 6. 
