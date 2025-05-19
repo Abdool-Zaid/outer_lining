@@ -17,7 +17,7 @@ instructions
 4. theme detection is automatic but you can set your own custom them with 
   state.controllers.set_theme("custom_theme")
   you can define your custom theme in state.themes in this format
-  ~~~JSON
+~~~JSON
 custom_theme:{
 primary: '#050808',
 secondary: '#86e9a5',
