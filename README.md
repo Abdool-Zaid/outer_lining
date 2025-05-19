@@ -1,6 +1,6 @@
 # outer_lining
 
-proof of concept v1
+proof of concept p.1.0.0
 
 instructions 
 1. link the min.js in html and no further imports will be needed anywhere else
