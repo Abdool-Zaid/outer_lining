@@ -78,7 +78,7 @@ function _set_theme(theme){
 }
 
 function _set_variable(key,value){
-    // console.log(key,value)
+   
     state.data[key]= value
 }
 
@@ -88,13 +88,13 @@ function _set_variables_in_dom(key){
   _all_elements.forEach((Element)=>{
 
     if(Element.template != undefined && Element.template.includes(`${pattern_start}${key}${pattern_end}`)){ // if you have a template use it , else check if you should have
-      // console.log(Element.template)
+      
                _interpolate_element (Element, key)   
 
     }else{
       if(!Element.innerHTML.includes("</") && Element.innerHTML.includes(pattern_start) && Element.innerHTML.includes(pattern_end)){
         if(Element.innerHTML.indexOf(pattern_start)< Element.innerHTML.indexOf(pattern_end)){
-          //  console.log('setting template')
+          
            Element.state = {}
             Element.template = Element.innerHTML
             _interpolate_element (Element, key)   
@@ -105,6 +105,20 @@ function _set_variables_in_dom(key){
   })
 }
 
+function _handle_loop(Element){
+let count= Element.getAttribute('count')
+  Element.template = Element.innerHTML 
+  if(count.includes(pattern_end && pattern_end)){
+    // handle custom number 
+  }else{
+    Element.innerHTML= ''
+    for (let index = 0; index < count; index++) {
+      Element.innerHTML += Element.template
+    }
+
+    
+  }
+}
 
 function _interpolate_element (Element, key){
   Element.state[key]= key
@@ -117,11 +131,32 @@ function _interpolate_element (Element, key){
      
 }
 
+function _render_custom_DOM_elements(){
+ let _all_elements = document.querySelectorAll("*") 
+ 
+  
+    _all_elements.forEach(Element=>{
+      switch (Element.tagName) {
+        case 'LOOP':
+            _handle_loop(Element)
+          break;
+        case 'INPUT' :
+              // input stuff could go here
+          break;
+        default:
+          break;
+      }
+
+    })
+
+}
+
 
 
 window.addEventListener('DOMContentLoaded',()=>{
     _set_theme()
-    // console.log(document.getElementById) // might want to extend to find by custom attribute
+_render_custom_DOM_elements()
+    
 })
 
 
