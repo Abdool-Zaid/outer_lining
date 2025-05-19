@@ -30,5 +30,5 @@ instructions
 ~~~
 
 
-    please note that the <loop> only works with one child element
-6. 
+please note that the loop only works with one child element
+
