@@ -31,6 +31,7 @@ const _handler = { // add hooks for user defined functions
   
       },
       set (target, key, value) {
+        
         target[key] = value;
         _set_variables_in_dom(key)
         return true
@@ -115,6 +116,15 @@ let count= Element.getAttribute('count')
     for (let index = 0; index < count; index++) {
       Element.innerHTML += Element.template
     }
+    if (Element.template.includes(pattern_start) && Element.template.includes( pattern_end)){ // bug: data is already set 
+      console.log(Element.template)
+      console.log('has dynamic data')
+      // Element.children.forEach(child=>{
+      //   console.log(child.innerHTML)
+      // })
+    }else{
+        console.log('no dynamic data found')
+    }
 
     
   }
@@ -152,10 +162,9 @@ function _render_custom_DOM_elements(){
 }
 
 
-
 window.addEventListener('DOMContentLoaded',()=>{
+  _render_custom_DOM_elements()
     _set_theme()
-_render_custom_DOM_elements()
     
 })
 
