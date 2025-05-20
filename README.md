@@ -6,8 +6,9 @@ instructions
 1. link the min.js in html and no further imports will be needed anywhere else
 
 2. to set data use this in any js file 
+~~~JS
     state.controllers.set_data('foo', 'bar')
-
+~~~
 3. to display the data in html, call it with double curly braces, and any time the data is changed it will be reflected in the DOM   
 ~~~HTML
  <h1>{{foo}}</h1>
@@ -33,3 +34,12 @@ accent : '#ff8847',
 
 please note that the loop only works with one child element
 
+6. you can set inputs with 
+
+~~~HTML
+    <input type="text" value="{{foo}}">
+
+~~~JS
+    state.controllers.set_input('foo', 'bar') // bar will show as the placeholder 
+
+~~~
