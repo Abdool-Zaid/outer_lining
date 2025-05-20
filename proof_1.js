@@ -124,8 +124,8 @@ function _set_variables_in_dom(key){
 }
 
 function _handle_inputs(Element){ 
-  let ref =  Element.value.replaceAll(pattern_start,'') // after merge, clean this up with _get_value_from_template 
-    ref= ref.replaceAll(pattern_end,'')
+  let ref = _get_value_from_template(Element.value)
+  console.log(state.data, ref)
     Element.placeholder= state.data[ref]
     Element.value=''
     Element.state= {}
