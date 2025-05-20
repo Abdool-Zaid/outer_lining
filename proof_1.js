@@ -2,7 +2,7 @@ let pattern_start = '{{'
 let pattern_end = '}}'
 let  _locations= []
 let _state ={
-    data:{},
+    data:{}, // might switch to io in the future
     themes: {
         wants_dark_theme : _prefers_dark_theme(),
         light:{
@@ -18,10 +18,14 @@ let _state ={
     },
     controllers:{
        set_theme :(theme) =>_set_theme(theme),
-       set_data:(key,value)=> _set_variable(key,value) 
+       set_data:(key,value)=> _set_variable(key,value),
+       set_input:(key,value)=> _set_input_variable(key,value) 
     }
 }
-const _handler = { // add hooks for user defined functions
+
+
+
+const _handler = { // chore: add hooks for user defined functions
     get(target, key) {
         if (typeof target[key] === 'object' && target[key] !== null) {
           return new Proxy(target[key], _handler)
@@ -38,8 +42,11 @@ const _handler = { // add hooks for user defined functions
       }
 };
 
-
-
+function _get_value_from_template(template){
+  let ref = template.replaceAll(pattern_start,'')
+  ref = ref.replaceAll(pattern_end,'')
+  return ref
+}
 
 
 function _prefers_dark_theme() { // might be better to put styling stuff in a seperate style file
@@ -54,8 +61,8 @@ function _set_theme(theme){
     }else if (!Object.keys(state.themes ).includes(theme)){
       return  alert("theme is not in state.themes, this argument can be ommited to use default theme ")
     } 
-
-    const cssRules = `
+    // chore: extend this to handle all css things
+    const cssRules = ` 
     *{
     background-color: ${state.themes[theme].primary};
     color:${state.themes[theme].secondary};
@@ -78,12 +85,20 @@ function _set_theme(theme){
 
 }
 
+
+
+function _set_input_variable(key,value){
+
+    state.data[key]= value //value should be displayed as placeholder
+}
+
 function _set_variable(key,value){
    
     state.data[key]= value
 }
 
 function _set_variables_in_dom(key){
+  _render_custom_DOM_elements()
   let _all_elements = document.querySelectorAll("*")
 
   _all_elements.forEach((Element)=>{
@@ -105,6 +120,33 @@ function _set_variables_in_dom(key){
     }
 
   })
+}
+
+function _handle_inputs(Element){ 
+  let ref = _get_value_from_template(Element.value)
+  if(Element.state == undefined){
+    Element.state= {}
+    Element.state[ref]= ref
+    Element.state.once = true
+  }
+  if(state.data[Object.keys(Element.state)[0]] != undefined){
+    if(Element.state.once){
+      Element.placeholder= state.data[Object.keys(Element.state)[0]]
+      Element.state.once= false
+    }
+
+  }
+  Element.value=''
+  Element.state[ref]= ref
+  Element.addEventListener('change',(Event)=>{
+    if(Element.value.length>0){
+      state.data[ref]= Element.value  
+      
+      Element.value=''
+    }
+
+  })
+
 }
 
 function _handle_loop(Element){
@@ -142,8 +184,8 @@ function _handle_loop(Element){
 function _interpolate_element (Element, key){
   Element.state[key]= key
   let variables = Object.keys(Element.state)
-  let res  =Element.attributes.template
-    variables.forEach(data=>{
+  let res  =Element.attributes.template 
+    variables.forEach(data=>{ //incrementally build the string so that we can handle as many pieces of data as we need to
       res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
     })
     Element.innerHTML = res 
@@ -154,13 +196,13 @@ function _render_custom_DOM_elements(){
  let _all_elements = document.querySelectorAll("*") 
  
   
-    _all_elements.forEach(Element=>{
+    _all_elements.forEach(Element=>{ // handle the different element types here
       switch (Element.tagName) {
         case 'LOOP':
             _handle_loop(Element)
           break;
         case 'INPUT' :
-              // input stuff could go here
+             _handle_inputs(Element)
           break;
         default:
           break;
@@ -172,7 +214,6 @@ function _render_custom_DOM_elements(){
 
 
 window.addEventListener('DOMContentLoaded',()=>{
-  _render_custom_DOM_elements()
     _set_theme()
     
 })
