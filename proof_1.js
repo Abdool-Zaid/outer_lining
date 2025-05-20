@@ -90,7 +90,6 @@ function _set_theme(theme){
 function _set_input_variable(key,value){
 
     state.data[key]= value //value should be displayed as placeholder
-
 }
 
 function _set_variable(key,value){
@@ -125,14 +124,22 @@ function _set_variables_in_dom(key){
 
 function _handle_inputs(Element){ 
   let ref = _get_value_from_template(Element.value)
-  console.log(state.data, ref)
-    Element.placeholder= state.data[ref]
-    Element.value=''
+  if(Element.state == undefined){
     Element.state= {}
     Element.state[ref]= ref
+    Element.state.once = true
+  }
+  if(state.data[Object.keys(Element.state)[0]] != undefined){
+    if(Element.state.once){
+      Element.placeholder= state.data[Object.keys(Element.state)[0]]
+      Element.state.once= false
+    }
+
+  }
+  Element.value=''
+  Element.state[ref]= ref
   Element.addEventListener('change',(Event)=>{
     if(Element.value.length>0){
-
       state.data[ref]= Element.value  
       
       Element.value=''
@@ -207,7 +214,6 @@ function _render_custom_DOM_elements(){
 
 
 window.addEventListener('DOMContentLoaded',()=>{
-  _render_custom_DOM_elements()
     _set_theme()
     
 })
