@@ -2,8 +2,7 @@ let pattern_start = '{{'
 let pattern_end = '}}'
 let  _locations= []
 let _state ={
-    data:{},
-    inputs:{}, // might switch to io in the future
+    data:{}, // might switch to io in the future
     themes: {
         wants_dark_theme : _prefers_dark_theme(),
         light:{
@@ -62,8 +61,8 @@ function _set_theme(theme){
     }else if (!Object.keys(state.themes ).includes(theme)){
       return  alert("theme is not in state.themes, this argument can be ommited to use default theme ")
     } 
-
-    const cssRules = `
+    // chore: extend this to handle all css things
+    const cssRules = ` 
     *{
     background-color: ${state.themes[theme].primary};
     color:${state.themes[theme].secondary};
@@ -90,7 +89,7 @@ function _set_theme(theme){
 
 function _set_input_variable(key,value){
 
-    state.inputs[key]= value //value should be displayed as placeholder
+    state.data[key]= value //value should be displayed as placeholder
 
 }
 
@@ -122,6 +121,25 @@ function _set_variables_in_dom(key){
     }
 
   })
+}
+
+function _handle_inputs(Element){ 
+  let ref =  Element.value.replaceAll(pattern_start,'') // after merge, clean this up with _get_value_from_template 
+    ref= ref.replaceAll(pattern_end,'')
+    Element.placeholder= state.data[ref]
+    Element.value=''
+    Element.state= {}
+    Element.state[ref]= ref
+  Element.addEventListener('change',(Event)=>{
+    if(Element.value.length>0){
+
+      state.data[ref]= Element.value  
+      
+      Element.value=''
+    }
+
+  })
+
 }
 
 function _handle_loop(Element){
@@ -159,8 +177,8 @@ function _handle_loop(Element){
 function _interpolate_element (Element, key){
   Element.state[key]= key
   let variables = Object.keys(Element.state)
-  let res  =Element.attributes.template
-    variables.forEach(data=>{
+  let res  =Element.attributes.template 
+    variables.forEach(data=>{ //incrementally build the string so that we can handle as many pieces of data as we need to
       res = res.replaceAll(`${pattern_start}${data}${pattern_end}`, state.data[data])
     })
     Element.innerHTML = res 
@@ -171,13 +189,13 @@ function _render_custom_DOM_elements(){
  let _all_elements = document.querySelectorAll("*") 
  
   
-    _all_elements.forEach(Element=>{
+    _all_elements.forEach(Element=>{ // handle the different element types here
       switch (Element.tagName) {
         case 'LOOP':
             _handle_loop(Element)
           break;
         case 'INPUT' :
-              // input stuff could go here
+             _handle_inputs(Element)
           break;
         default:
           break;
