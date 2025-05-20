@@ -164,10 +164,21 @@ function _handle_loop(Element){
     
   }else{
   }
-    let temp = Element.firstChild.outerHTML
+  
+  let temp
+   if (Element.attributes.loop_template == undefined) {
+      
+       temp = Element.firstChild.outerHTML
+      
+      if (temp == undefined){
+        temp = Element.innerHTML.trim()
+    
+      }
+      Element.attributes.loop_template = temp
+    }
     Element.innerHTML =''
     for (let index = 0; index < count; index++) {
-      Element.innerHTML += temp
+      Element.innerHTML += Element.attributes.loop_template // won't work first time since attribute is not there
       
     }
     children = Element.children; 
