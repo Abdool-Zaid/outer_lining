@@ -168,7 +168,7 @@ function _handle_loop(Element){
   let temp
    if (Element.attributes.loop_template == undefined) {
       
-       temp = Element.firstChild.outerHTML
+       temp = Element.firstChild.outerHTML // children[0] ?
       
       if (temp == undefined){
         temp = Element.innerHTML.trim()
