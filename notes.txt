@@ -1,0 +1,1 @@
+[bug] if no variables are being set, loops don't work 

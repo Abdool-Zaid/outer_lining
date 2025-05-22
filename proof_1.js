@@ -121,6 +121,12 @@ function _set_variables_in_dom(key){
 
   })
 }
+function _handle_array(Element) {
+  let ref =Element.attributes.data.value
+  if(state.data[ref] instanceof Array){
+    console.log(Element)
+  }
+}
 
 function _handle_inputs(Element){ 
   let ref = _get_value_from_template(Element.value)
@@ -211,6 +217,9 @@ function _render_custom_DOM_elements(){
       switch (Element.tagName) {
         case 'LOOP':
             _handle_loop(Element)
+          break;
+        case 'ARRAY':
+            _handle_array(Element)
           break;
         case 'INPUT' :
              _handle_inputs(Element)
