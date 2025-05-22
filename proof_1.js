@@ -1,5 +1,7 @@
 let pattern_start = '{{'
 let pattern_end = '}}'
+let arr_pattern_start= "[["
+let arr_pattern_end= "]]"
 let  _locations= []
 let _state ={
     data:{}, // might switch to io in the future
@@ -124,7 +126,13 @@ function _set_variables_in_dom(key){
 function _handle_array(Element) {
   let ref =Element.attributes.data.value
   if(state.data[ref] instanceof Array){
-    console.log(Element)
+    let template 
+      if(!Element.getAttribute('template')){
+        template = Element.children[0]
+     }else{
+      template = Element.attributes.template
+     }
+
   }
 }
 

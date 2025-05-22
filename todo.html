@@ -7,7 +7,11 @@
 </head>
 <body>
     <input type="text" name="text_inp_1" value="{{text_inp_1}}" >
-    <array data="todo_list"></array>
+    <array data="todo_list" array-item="item">
+        <div>
+            <h1>[[item]]</h1>
+        </div>
+    </array>
         </body>
         <script src="proof_1.js"></script>
         <script src="todo_data.js"></script>
