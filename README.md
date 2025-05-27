@@ -1,5 +1,5 @@
 # outer_lining
-
+This is a MVC framework made entirely in JS
 proof of concept p.1.0.0
 
 instructions 
