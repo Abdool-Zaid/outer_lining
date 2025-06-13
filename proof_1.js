@@ -124,16 +124,35 @@ function _set_variables_in_dom(key){
   })
 }
 function _handle_array(Element) {
-  let ref =Element.attributes.data.value
-  if(state.data[ref] instanceof Array){
-    let template 
-      if(!Element.getAttribute('template')){
-        template = Element.children[0]
-     }else{
-      template = Element.attributes.template
-     }
 
-  }
+    let template = Element.firstElementChild
+    let ref =Element.attributes.data.value
+
+
+    if(!template){
+      console.error('no template found')
+    }else{
+      Element.attributes.arr_template= template.cloneNode(true)
+        if(!state.data[ref]){
+          console.log(state.data)
+          console.error(`invalid state refference: ${ref}`)
+        }else{
+          if (! state.data[ref] instanceof Array){
+            console.error(`${ref} is not an array`)
+          }else{
+              // data and env is good , should render the array
+              Element.innerHTML=''
+              state.data[ref].forEach(item=>{
+                  let el = template.cloneNode(true)
+                Element.appendChild(el)
+              })
+          }
+          
+        }
+      // 
+    }
+
+  
 }
 
 function _handle_inputs(Element){ 
